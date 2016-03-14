@@ -5,6 +5,8 @@
 ###Pass the Ball
 球不是我的，但是需要我传递下去。
 
+我觉得优秀的文章会翻译成中文
+
 ###分类
 
 Column | Introduction | Third Header
