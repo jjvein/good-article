@@ -5,8 +5,9 @@ We will be covering the branching workflow with a simple example.
 
 Say for instance, you are currently working on a new feature on the current branch. Suddenly, somebody finds a bug in the production and you are now tasked to fix that bug, parallel to working on the new feature earlier.
 
-###使用开发分支和融合分支的分支工作流
+###使用功能分支和融合分支的分支工作流
 我们将会通过具体的例子来讲解分支流。  
+
 举个例子，你现在在一个新的功能分支做开发工作。突然，生产环境出现了一个Bug需要你马上去修复，和当前的新功能分支并行开发。  
 
 ![1](https://backlogtool.com/git-guide/en/img/post/stepup/capture_stepup1_5_1.png)
@@ -18,7 +19,7 @@ This new branch will isolate the bug fix from the new feature that you were work
 
 在开始修复Bug之前，你需要基于融合分支创建新的分支。
 
-这个新的分支会隔离功能分支对Bug修复的可见性。
+这个新的分支会隔离功能分支对Bug修复提交的可见性。
 
 ![2](https://backlogtool.com/git-guide/en/img/post/stepup/capture_stepup1_5_2.png)
 
@@ -102,7 +103,7 @@ The main branch consists of the master and develop branches.
 
 - Master
 		
-		master分支作为代码基线被认为是可发布的。当有一个新的发布时，最后的发布将会产生一个tag。
+		master分支作为代码基线被认为是可发布的。当有一个新的发布时，最后的提交将会产生一个tag。
 		
 - Develop
 	
@@ -122,7 +123,7 @@ You should push this branch up to the remote repository whenever you are ready t
 
 这个分支和我们之前提到的新功能开发分支类似。
 
-当你开发新功能或者修复Bug，你会创建一个新的分支。这个分支应该从develop分支创建分离。这个feature分支会在你功能开发的整个生命周期都存在你本地机器。
+当你开发新功能或者修复Bug，你会创建一个新的分支。这个分支应该从develop分支创建分离。这个feature分支会在你功能开发的整个生命周期存在于你本地机器。
 
 当你开发完成后，需要将代码推送到远程仓库中，并合并到develop分支中。 
 
@@ -144,11 +145,11 @@ You would also want to merge the release branch into the develop branch, so that
 
 当你准备发布代码时，你需要创建一个release分支。这个release分支能够帮助你确认所有的新功能都能够正常运行。
 
-按照约定，所有的release版本都应该以“release-”开始。发布分支是从develop分支分离出来的。
+按照约定，所有的release分支都应该以“release-”开始。release分支是从develop分支分离出来的。
 
 只有修复Bug和发布相关的工作可以在这个分支完成。使用这个分支的目的是为了让其它团队的成员在发布时可以继续往develop分支合并代码。
 
-发布之前，将发布分支与master分支合并合并并打上标签。
+发布之前，将release分支与master分支合并合并并打上标签。
 
 同时你需要将release分支往develop分支合并，这样master分支和develop分支都将会收到来自release分支最新的修改
 
@@ -168,6 +169,6 @@ A hot fix branch should be merged with the develop branch as well.
 
 按照约定，修复分支的名称需要以"hotfix-"开始。
 
-使用hotfix修复分支的好处是它允许你快速的发出补丁包且直接与master合并而不用等到下一个release。
+使用hotfix修复分支的好处是它允许你快速的发出补丁包与master合并而不用等到下一个release。
 
 同样，hotfix分支需要和develop分支合并。
