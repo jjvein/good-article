@@ -10,8 +10,8 @@
 ###分类
 
 Column | Introduction | Third Header
------------- | ------------- | ------------
+:------------ | :-------------: | ------------
 git | git相关  | [链接](https://github.com/jjvein/good-article/tree/master/git)
 performance-calendar | 性能相关 | [链接](https://github.com/jjvein/good-article/tree/master/performance-calendar)
-
+new-tech | 介绍和新技术相关的 | [链接](https://github.com/jjvein/good-article/tree/master/new-tech)
 
