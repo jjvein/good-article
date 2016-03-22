@@ -59,7 +59,7 @@ test(arr);
 
 The array methods that process the numbered properties (forEach in our case) will only process those that exist. If you instead process the array using a for or while loop then the loop will also attempt to process those properties that don’t exist and the array will identify those entries that don’t exist as being undefined. Your code would then be unable to distinguish between the last of the above examples and the first two. You should always use the array methods for processing an array where you are not certain that you are dealing with a dense array.
 
-```foreach```数组方法只能循环的读出存在的数字属性。如果你使用```for```或者```while```循环来输出数组，那么它会尝试输出不存在数组中的元素，数组检测到这些条目并不存在时，就会赋上默认的undefined。这样你的后面的一组例子的结果就和第一组输出一致了。
+`foreach`数组方法只能循环的读出存在的数字属性。如果你使用`for`或者`while`循环来输出数组，那么它会尝试输出不存在数组中的元素，数组检测到这些条目并不存在时，就会赋上默认的undefined。这样你的后面的一组例子的结果就和第一组输出一致了。
 
 你应该始终使用数组方法来处理数组，因为你不确定是否你在处理一个超出边界的数组。
 
@@ -67,7 +67,7 @@ The array methods that process the numbered properties (forEach in our case) wil
 
 The following examples look at what happens if we set a new length for the array that is less than the current length.
 
-下面的例子中，我们对当前数组设置一个小于当前数组长度的```length```，看看会发生什么： 
+下面的例子中，我们对当前数组设置一个小于当前数组长度的`length`，看看会发生什么： 
 
 ````
 var arr = ['a', 'b', 'c', 'd', 'e', 'f'];
