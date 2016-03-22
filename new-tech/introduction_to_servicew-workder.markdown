@@ -440,8 +440,13 @@ If we have the following two images:
 
 In a srcset image, we'd have some markup like this:
 
+```
 <img src="image-src.png" srcset="image-src.png 1x, image-2x.png 2x" />
+```
+
 If we are on a 2x display, then the browser will opt to download image-2x.png, if we are offline you could .catch this request and return image-src.png instead if it's cached, however the browser will expect an image which takes into account the extra pixels on a 2x screen, so the image will appear as 200x200 CSS pixels instead of 400x400 CSS pixels. The only way around this is to set a fixed height and width on the image.
+
+如果在2x的像素屏幕上展示，浏览器将会选择下载image-2x.png,如果是在离线环境中，你可能会在缓存中找到image-src.png。然而浏览器期待的是能够在2x分辨率屏幕上显示的图片。所以目前唯一的解决方法是给图片设置宽度和高度。
 
 ```
 <img src="image-src.png" srcset="image-src.png 1x, image-2x.png 2x"
@@ -449,3 +454,5 @@ style="width:400px; height: 400px;" />
 ```
 
 For <picture> elements being used for art direction, this becomes considerably more difficult and will depend heavily on how your images are created and used, but you may be able to use a similar approach to srcset.
+
+
