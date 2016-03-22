@@ -165,5 +165,6 @@ test(arr2); // length:2
 ```
 
 ### Conclusion
+
 The above examples should have given you a better idea of how the length property of an array works. This can be greater or equal to the number of entries in the array. Where it is equal we have a dense array and where it is greater we have a sparse array. Exactly what a particular array method does can depend on whether there is actually a property corresponding to a given position in a sparse array. If we change the length of an array it removes any numbered properties in the array that are in positions that are greater than the new length. If the length was equal to the amount of numbered properties and we increase the length then we convert a dense array to a sparse one. The array methods for deleting and adding properties in the array will move the existing entries around where necessary and will also retain and move any gaps between the properties.
 
