@@ -168,3 +168,5 @@ test(arr2); // length:2
 
 The above examples should have given you a better idea of how the length property of an array works. This can be greater or equal to the number of entries in the array. Where it is equal we have a dense array and where it is greater we have a sparse array. Exactly what a particular array method does can depend on whether there is actually a property corresponding to a given position in a sparse array. If we change the length of an array it removes any numbered properties in the array that are in positions that are greater than the new length. If the length was equal to the amount of numbered properties and we increase the length then we convert a dense array to a sparse one. The array methods for deleting and adding properties in the array will move the existing entries around where necessary and will also retain and move any gaps between the properties.
 
+上面的例子应该让你对数组的`length`属性非常了解。它可以大于等于数组的条目。如果它的值等于数组长度，我们有一个越界的函数，如果它的值大于数组条目，我们则获得一个稀疏的数组。数组方法返回的内容取决于稀疏数组的元素。我们修改数组的长度时，数组的元素大于该长度的条目则自动清除。
+
