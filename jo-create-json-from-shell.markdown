@@ -8,6 +8,7 @@ github地址：https://github.com/jpmens/jo.git
 ### 安装
 
 1. brew
+
 		brew update
 		brew install jo
 		
@@ -21,7 +22,7 @@ github地址：https://github.com/jpmens/jo.git
 		make check
 		make install
 
-3. 从github上面安装
+3. 从github安装
 		
 		git clone git://github.com/jpmens/jo.git
 		cd jo
@@ -38,18 +39,23 @@ jo [-p] [-a] [-B] [-v] [-V] [word ...]
 
 ### 说明
 
-**jo**可以接受参数，或者从标准输入，然后输出JSON。如果没有-a，则生成一个对象，每个参数都是一个`key=value`的键值对，生成的JSON对象中，"key"就是键，"value"是值。**jo**会尝试解析"value"的类型，对应的返回"number", "string", null这样的类型。
+**jo**可以接受参数，或者从标准输入，然后输出JSON。如果没有`-a`选项，则生成一个对象，每个参数都是一个`key=value`键值对，生成的JSON对象中，"key"是键，"value"是值。**jo**会尝试解析"value"的类型，对应的返回"number", "string", null等数据类型。
+
+
+如果**jo**带参数`-a`，那么则会创建一个数组。
 
 ```
 jo -a -p name=jjvein age=15
+
 //output
 [
    "name=jjvein",
    "age=15"
 ]
 
-//no -a 
+//no -a parameter
 json -p name=jjvein age=15
+
 //output
 {
    "name": "jjvein",
@@ -57,7 +63,7 @@ json -p name=jjvein age=15
 }
 ```
 
-**jo** 将`key@value`作为boolean类型的JSON元素处理：如果"value"以T,t开头，或者是大于0的数字，结果都为true， 否则为false。如果内容为空则返回的结果为null类型。
+**jo** 将`key@value`处理成boolean类型的JSON元素：如果"value"以T,t开头，或者是大于0的数字，结果都为true， 否则为false。如果内容为空则返回null类型。
 
 ```
 jo -p name=jjvein boy@t
@@ -77,19 +83,18 @@ jo -p name=jjvein boy@
 }
 ```
 
-如果**jo**带有`-a`参数，那么则会创建一个数组。
 
 ### 参数说明
 
-- -a 使用数组而不是对象的方式来解析参数，生成数组
-- -B 默认情况下，**jo**会解析"true"和"false"这样的字符串，可以使用-B来禁止解析
-- -p 优雅的输出JSON字符串，不输出成一行
+- -a 使用数组而不是对象的方式来解析参数，生成数组类型的JSON对象
+- -B 默认情况下，**jo**会解析"true"和"false"这样的字符串，可以使用`-B`禁止解析
+- -p 优雅的输出JSON字符串，而不是输出成一行
 - -v 显示版本号
 - -V 显示JSON版本号
 
 ### 使用范例
 
-1. 创建一个对象
+1. 创建一个JSON对象：
 		
 		jo tst=1457081292 lat=12.3456 cc=FR badfloat=3.14159.26 name="JP Mens" nada= coffee@T
 		
@@ -140,7 +145,7 @@ jo -p name=jjvein boy@
            }
 	
 
-4. Boolean作为字符串或者布尔值(-B选项不允许默认检测"true"和"false"字符串。)
+4. Boolean作为字符串或者布尔值(-B选项不允许检测"true"和"false"字符串。)
 
 		jo switch=true morning@0
 		
@@ -152,12 +157,11 @@ jo -p name=jjvein boy@
 		//output
 		{"switch":"true","morning":false}
 		
-5. 元素（对象和数组）可以被拆分整齐划的展示，下面的例子中有一个数组`point`，一个对象`geo`
+5. 元素（对象和数组）可以被拆分开整齐的展示，下面的例子中有一个数组`point`，一个对象`geo`
 
 		jo -p name=Jane point[]=1 point[]=2 geo[lat]=10 geo[lon]=20
 		
 		//output
-              $ jo -p name=Jane point[]=1 point[]=2 geo[lat]=10 geo[lon]=20
               {
                  "name": "Jane",
                  "point": [
@@ -183,7 +187,7 @@ jo -p name=jjvein boy@
 
 ### 注意
 
-数字字符串会被转换为数字，有时候这可能并不是你想要的输出，可以转义引号。
+数字字符串会被转换为数字，有时候这可能并不是想要的输出，可以\转义引号。
 
 ```
 jo a=1.0
