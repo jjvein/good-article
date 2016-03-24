@@ -3,7 +3,9 @@ github地址：https://github.com/jpmens/jo.git
 
 ### 介绍
 
-**jo**: 该工具可以实现从shell命令行输出JSON字符串
+**jo**: 该工具可以实现从shell命令行输出JSON
+
+
 
 ### 安装
 
@@ -39,7 +41,7 @@ jo [-p] [-a] [-B] [-v] [-V] [word ...]
 
 ### 说明
 
-**jo**可以接受参数，或者从标准输入，然后输出JSON。如果没有`-a`选项，则生成一个对象，每个参数都是一个`key=value`键值对，生成的JSON对象中，"key"是键，"value"是值。**jo**会尝试解析"value"的类型，对应的返回"number", "string", null等数据类型。
+**jo**可以接受参数，或者从标准输入，然后输出JSON。如果没有`-a`选项，则生成一个对象，每个参数都是一个`key=value`键值对，生成的JSON，"key"是键，"value"是值。**jo**会尝试解析"value"的类型，对应的返回"number", "string", null等数据类型。
 
 
 如果**jo**带参数`-a`，那么则会创建一个数组。
@@ -54,7 +56,7 @@ jo -a -p name=jjvein age=15
 ]
 
 //no -a parameter
-json -p name=jjvein age=15
+jo -p name=jjvein age=15
 
 //output
 {
@@ -86,15 +88,15 @@ jo -p name=jjvein boy@
 
 ### 参数说明
 
-- -a 使用数组而不是对象的方式来解析参数，生成数组类型的JSON对象
+- -a 使用数组而不是对象的方式来解析参数，生成数组类型的JSON
 - -B 默认情况下，**jo**会解析"true"和"false"这样的字符串，可以使用`-B`禁止解析
-- -p 优雅的输出JSON字符串，而不是输出成一行
+- -p 优雅的输出JSON，而不是输出成一行
 - -v 显示版本号
 - -V 显示JSON版本号
 
 ### 使用范例
 
-1. 创建一个JSON对象：
+1. 创建一个JSON：
 		
 		jo tst=1457081292 lat=12.3456 cc=FR badfloat=3.14159.26 name="JP Mens" nada= coffee@T
 		
