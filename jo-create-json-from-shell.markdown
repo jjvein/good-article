@@ -189,7 +189,7 @@ jo -p name=jjvein boy@
 
 ### 注意
 
-数字字符串会被转换为数字，有时候这可能并不是想要的输出，可以\转义引号。
+1.数字字符串会被转换为数字，有时候这可能并不是想要的输出，可以\转义引号。
 
 ```
 jo a=1.0
@@ -207,3 +207,26 @@ jo a=\"1.0\"
 //output
 {"a":"1.0"}
 ```
+
+2.当你只输入`jo`时，命令行会等待用户输入，这是只接受键值对的方式输入，如： 
+
+```
+name=jjvein
+name
+Argument `name' is neither k=v nor k@v
+age=15
+sex@t
+{"name":"jjvein","age":15,"sex":true}
+```
+
+如果输入命令`jo -a`则命令行对每行输入以数组的方式处理。
+
+```
+name=jjvein
+age
+sex
+1,2["name=jjvein","age","sex","1,2"]
+```
+
+
+
