@@ -1,0 +1,81 @@
+## [Web Components in production use – are we there yet?](https://vaadin.com/blog/-/blogs/web-components-in-production-use-are-we-there-yet-)
+
+Published Date 1/26/16 4:30 AM
+
+
+![Web Components are here](https://vaadin.com/documents/10187/0/wc-logo.png/163e9e40-fda0-4a2d-807d-fe121d7f30ab?t=1453782003475)
+
+A lot of progress has been made since the introduction of the Web Components back in 2011. All major browsers have started implementation of the technologies needed to run web components natively. While browser vendors are still working on native implementations, libraries have been able to use a polyfill to make web components available to developers already.
+
+But what is the status of Web Components for actual production use in business applications? In this post, I’ll be taking a look at the support for Web Components in browsers and their adaptation by companies. But before we get to that, let’s take a quick refresher on what Web Components are and why we would want to use them in the first place.
+
+*web component*从2011年以来有很大的进步。所有主流的浏览器都努力的实现web component的功能。在浏览器实现这些功能的同时，一些类库已经使用polyfill来实现各个浏览器的兼容。
+
+但是web component对于商业生成环境的状况如何呢？ 这篇文章，我将介绍各个浏览器对于web component的支持和它们所做的工作。 首先，我们介绍一下web component是什么，为什么我们想要使用web component呢？ 
+
+### The promise of Web Components
+
+Web Components aim to change the way we build web applications by allowing developers to extend the HTML vocabulary by creating their own reusable HTML elements. This seemingly simple addition means that developers can build their software out of higher level components.
+
+Component based UI libraries have been the standard way of building complex native applications for years, and many modern web frameworks like Angular and Vaadin give us the ability to compose our UI out of reusable blocks. The big difference between these approaches and Web Components is that Web Components bring the componentization to a DOM level so that the custom elements can be used with any framework just like any standard HTML element.
+
+One of the great advantages of Web Components is that they allow us to build on other’s work instead of reinventing the wheel. Most software use a fairly standardized set of UI controls – components like data tables, date pickers, input fields etc. By using an existing component for your software you are not only saving the time that it would take you to build it in the first place, but you also don’t need to spend time maintaining it in the future. Instead, you get the benefits of more people contributing bug fixes and performance improvements to the same component - resulting in a better component for all users.
+
+For a more in-depth look at the history of Web Component and the problems they hope to solve, I suggest reading this great blog post on the Microsoft Edge Blog.
+
+基于UI的库的组件已经成为家里复杂native程序的标准，像`Angular`和`Vaadin`这样的web框架可以让我们自行组织UI来实现可重用的代码块。这些方法和Web Component最大的不同点在于Web Component是建立在DOM层，所以自定义的组件可以使用最基本的HTML元素来创造。
+
+Web Component的最大优势在于它允许我们使用其他人编写的功能组件，而不需要重复的造车轮。大多数软件都使用标准的UI来控制，而Component则使用数据表，日历组件，input输入框等。使用已经写好的组件不仅可以帮助节省重新开发的时间，同时你也不用花费大量的时间来维护他。相反，会有更多的人为你的组件提Bug，不断提升你的组件-这也可以让组件得到更广泛的利用。
+
+想更加深入的了解component的历史，以及他们希望解决的问题， 我推荐阅读这篇文章[Microsoft Edge Blog](https://blogs.windows.com/msedgedev/2015/07/14/bringing-componentization-to-the-web-an-overview-of-web-components/)
+
+When we talk about Web Components, we are really talking about four separate W3C standards that together give us the tools we need to build our own components: Custom Elements, Templates, HTML Imports and Shadow DOM.
+
+- The Custom Element standard defines a way for us to define new element types in the browser DOM. This allows us to give our components a meaningful name that allows developers to use the component like any other HTML element. For instance, the Vaadin Grid defines a <vaadin-grid> element.
+
+- HTML Imports are a way of including HTML documents in other documents. This enables us to reuse the components as we can include them on any page without having to copy-paste the HTML.
+
+- Templates allow us to define inert HTML subtrees that can be stamped into the DOM. Being inert means that we can define the HTML without inserting it into the DOM or running it. As an example, this allows us to import <vaadin-grid> into our document without it showing up before we actually use it by inserting a <vaadin-grid> tag into our HTML.
+
+- Shadow DOM is the core of the Web Components standards. Shadow DOM allows us to encapsulate our element implementation into a separate DOM tree in order to shield it form the surrounding document, and conversely shielding the host document from changes introduced by the component. A good example of why we want to do this is CSS styling. We do not want styles from a Web Component to affect the parent page, and conversely, we don’t want the parent page to break the component. The Shadow DOM spec gives us the tools to control how we want the trees to interact with each other.
+
+当我们讨论组建时
+
+### State of browser support
+As I mentioned earlier on, all browser vendors are working on introducing native support for Web Components. What’s even better is that a lot of collaboration is happening between the vendors, with members from each participating in the specification process.
+
+Chrome is the current gold standard for Web Component support, largely because of Google’s strong role in pushing for the standards. All four parts of the Web Components standards have native support in Chrome and can be used without polyfills.
+
+Firefox ships with an implementation for Templates and allows you to turn on Shadow DOM and Custom Elements with a development flag. The only remaining piece, HTML Imports, has been put on hold as they feel that there is too much overlap between ES6 Module Loading and HTML Imports and want to see how this plays out. Regardless of this, Wilson Page from Mozilla concluded in a June blog post that “we’re optimistic the end is near. All major vendors are on board, enthusiastic, and investing significant time to help resolve the remaining issues.”
+
+Safari (WebKit) ships with template support and as of recently Shadow DOM support in nightlies. There is also a prototype implementation of Custom Elements, but like Mozilla, the WebKit team believes that ES6 modules should be the basis for importing templates and is therefore not actively working on supporting them yet.
+
+Microsoft recently shipped HTML Template support in Edge 13. In a blog post, they indicated that they are working on implementing all of the Web Component standards and are collaborating with the other vendors in finalizing the specification work.
+
+Polyfills
+
+As native browser support is not quite there yet even in the most recent browser versions, any production use will still need to rely on the Web Components Polyfill in order to support most browsers. With the polyfill, Web Components can be used in all the latest evergreen web browsers as well as Internet Explorer 11. As Microsoft ended support for older versions of IE in January the polyfill will allow you to target all actively supported web browsers out there.
+
+As more browsers are adding support for Web Components, you should use feature detection to determine whether or not the polyfill is needed, so users on browsers with native support can get a faster experience.
+
+Libraries
+
+The Web Component APIs offer fairly low level programmatic APIs, so several libraries have been created to ease the development of new Web Components: X-Tag, Polymer and Bosonic. All the libraries offer helpers and syntax sugar to cut down boilerplate code and make creating new components easier. They all use the same Web Components polyfill as their base.
+
+Both Polymer and Bosonic also offer a library of ready made Web Components in addition to the helper APIs. Fortunately, as a consumer of Web Components you don’t need to worry about what libraries have been used for creating components. As they are all based on the Web Components standards, you can mix and match components as you please.
+
+Out of the three libraries, Polymer has been most widely adopted. The Vaadin Elements web component library is based on Polymer.
+
+Web Component adaptation
+Web Components have been taken into production use by several big companies such as Google, GitHub, Comcast, Salesforce and General Electric. Some of the more high profile sites using Web Components are Youtube Gaming, Google Patents, Google Music and GitHub.
+
+According to the Chrome Dev Summit Keynote by Taylor Savage, there were already over 1,000,000 sites using Polymer in November 2015. So even though Web Components are still a new and evolving technology, there are already a lot of people and companies using them in the wild.
+
+Should you build your app with Web Components?
+Now that we’ve seen that Web Components are already in production use by some of the biggest companies in the world and that the Web Component polyfill will allow us to support all modern browsers, the question that remains to be answered – how do you get started?
+
+Many people struggle with understanding how Web Components should be used. Should individual Web Components be used to extend existing front end frameworks, or should you build your entire application out of Web Components?
+
+The creators of Bosonic explain that “Web Components enable the creation of UI atoms as HTML elements, atoms that you can include into your components templates, powered by Angular, Ember, React or whatever”. Likewise, Kevin Schaaf from the Polymer team explained that “Polymer’s primary mission is to help you build custom elements – full stop”. However, he continues to explain that by leveraging the DOM as your framework, you are able to build full applications with nothing but Web Components.
+
+This means that you can use Web Components as much or as little as you want in your application. You can decide to only improve one static table on your site by wrapping it in a <vaadin-grid> or introduce a “time ago” tag like GitHub. But there’s also nothing preventing you from building a full blown application with nothing but Web Components like we did in our Expense Manager Web Components demo application – the choice is yours.
