@@ -39,9 +39,16 @@ When we talk about Web Components, we are really talking about four separate W3C
 
 - Shadow DOM is the core of the Web Components standards. Shadow DOM allows us to encapsulate our element implementation into a separate DOM tree in order to shield it form the surrounding document, and conversely shielding the host document from changes introduced by the component. A good example of why we want to do this is CSS styling. We do not want styles from a Web Component to affect the parent page, and conversely, we don’t want the parent page to break the component. The Shadow DOM spec gives us the tools to control how we want the trees to interact with each other.
 
-当我们讨论组建时
+当我们讨论组建时,其实是在讨论4个独立的W3C标准融合在一起形成的工具：自定义元素，模板，HTML导入和隐形DOM。
+
+- 自定义元素标准让我们能够在浏览器的DOM中自定义新的元素。这允许我们给自己的组件定义一个有意义的名字，并且可以让其他开发者像使用普通HTML元素一样来使用。举个例子*Vaadin Grid*定义了一个`<vaadin-grid>`的元素。
+- HTML导入标准定义在一个HTML文档中引入另一个文档。这可以让我们不需要拷贝复制来完成模板的重用。
+- 模板允许我们在DOM树中定义插入HTML子数的位置。被插入表示我们可以定义HTML，但是并不一定需要将它插入到DOM中，或者运行它。举个例子，我们可以将`vaadin-grid`引入到文档中，但是在将`vaadin-grid`插入到文档之前，它都不会显示出来。 
+- 隐形DOM是Web Component的核心标准。隐形DOM允许我们使用独立的DOM树来包含元素实现，并将它与周围的文档进行分割。这使得我们引入的文档不会影响到主文档。CSS样式就是一个很好的例子，我们不希望引入的Web Component影响到父页面，相反的，我们也不希望父页面弄乱组件的样式。隐形DOM标准能够让我们很好的控制DOM树之间的影响关系。 
+
 
 ### State of browser support
+
 As I mentioned earlier on, all browser vendors are working on introducing native support for Web Components. What’s even better is that a lot of collaboration is happening between the vendors, with members from each participating in the specification process.
 
 Chrome is the current gold standard for Web Component support, largely because of Google’s strong role in pushing for the standards. All four parts of the Web Components standards have native support in Chrome and can be used without polyfills.
@@ -52,13 +59,25 @@ Safari (WebKit) ships with template support and as of recently Shadow DOM suppor
 
 Microsoft recently shipped HTML Template support in Edge 13. In a blog post, they indicated that they are working on implementing all of the Web Component standards and are collaborating with the other vendors in finalizing the specification work.
 
-Polyfills
+浏览器目前的支持情况
+
+正如我之前提到的，所有的浏览器厂商都在努力的支持Web Component。更加让人开心的是，这些厂商也在互相合作，并且成为标准推动的成员之一。 
+
+Chrome目前是Web Component支持的“黄金准则”，主要是因为它是推动标准的主要角色之一。所以这四个标准都能够被Chrome很好的支持，并且不需要任何的Polyfills。
+
+Firefox实现了模板标准并且允许你在开发者模式下打开隐形DOM和自定义元素。唯一的HTML导入部分，被暂时停止是因为他们认为HTML导入和ES6的模块加载有太多相似的地方，在考虑如何来实现。他们也在努力的克服这些问题，尽快实现这个标准。
+
+### Polyfills
 
 As native browser support is not quite there yet even in the most recent browser versions, any production use will still need to rely on the Web Components Polyfill in order to support most browsers. With the polyfill, Web Components can be used in all the latest evergreen web browsers as well as Internet Explorer 11. As Microsoft ended support for older versions of IE in January the polyfill will allow you to target all actively supported web browsers out there.
 
 As more browsers are adding support for Web Components, you should use feature detection to determine whether or not the polyfill is needed, so users on browsers with native support can get a faster experience.
 
-Libraries
+因为目前大多数浏览器还没有得到完全的支持，任何使用使用Web Component功能的产品都必须依赖Web Component的Pollfill以得到大多数浏览器的支持。使用Polyfill，Web Component可以在大多数浏览器包括IE11上运行。随着IE停止对老版本浏览器更新，使用Polyfill几乎就能得到所有在维护浏览器的支持。
+
+随着越来越多的浏览器支持Web Component，你应该使用特性检查来确认是否需要加载Polyfill以提升更好的用户体验。
+
+### Libraries
 
 The Web Component APIs offer fairly low level programmatic APIs, so several libraries have been created to ease the development of new Web Components: X-Tag, Polymer and Bosonic. All the libraries offer helpers and syntax sugar to cut down boilerplate code and make creating new components easier. They all use the same Web Components polyfill as their base.
 
@@ -66,12 +85,25 @@ Both Polymer and Bosonic also offer a library of ready made Web Components in ad
 
 Out of the three libraries, Polymer has been most widely adopted. The Vaadin Elements web component library is based on Polymer.
 
-Web Component adaptation
+web component API提供了低等级的编程API，所以出现很多类库来让开发Web Component更加轻松：[X-Tag](http://x-tag.github.io/)， [Polymer](https://www.polymer-project.org/)， [Bosonic](http://bosonic.github.io/)。所有的类库提供Helper和语法糖减少基础的编码从而使开发新组建更加简单。这些类库都使用基础的Web Component Polyfill作为基础。
+
+Polymer和Bosonic在提供helper的同时，还提供一个编程的类库。作为Web Component的消费者你不需要关注使用的类库。他们都是基于Web Component的标准，你可以按照你的喜好混合匹配使用组件。
+
+在这三个类库中，Polymer被广泛的接受。[The Vaadin Element web component library](https://vaadin.com/elements)就是基于Polymer框架实现的。
+
+### Web Component adaptation
+
 Web Components have been taken into production use by several big companies such as Google, GitHub, Comcast, Salesforce and General Electric. Some of the more high profile sites using Web Components are Youtube Gaming, Google Patents, Google Music and GitHub.
 
-According to the Chrome Dev Summit Keynote by Taylor Savage, there were already over 1,000,000 sites using Polymer in November 2015. So even though Web Components are still a new and evolving technology, there are already a lot of people and companies using them in the wild.
+According to the Chrome Dev Summit Keynote by Taylor Savage, there were already over 1,000,000 sites using Polymer in November 2015. So even though Web Components are still a new and evolving technology, there are already a 
+lot of people and companies using them in the wild.
 
-Should you build your app with Web Components?
+Web Component已经被Google，Github，Comcast，Salesforce，General Electric这样的大公司在生存环境中使用。一些图表网站如Youtube Gaming，Google Parents，Google Music和Github也是用Web Component开发。
+
+根据[Chrome Dev Summit Keynote by Taylor Savage](https://www.youtube.com/watch?v=lck68wyVUo4),截止2015年11月，已经有超过1000,000个网站使用Polymer。即使说Web Component是一个的技术，已经有很多人和公司在使用它。
+
+### Should you build your app with Web Components?
+
 Now that we’ve seen that Web Components are already in production use by some of the biggest companies in the world and that the Web Component polyfill will allow us to support all modern browsers, the question that remains to be answered – how do you get started?
 
 Many people struggle with understanding how Web Components should be used. Should individual Web Components be used to extend existing front end frameworks, or should you build your entire application out of Web Components?
@@ -79,3 +111,13 @@ Many people struggle with understanding how Web Components should be used. Shoul
 The creators of Bosonic explain that “Web Components enable the creation of UI atoms as HTML elements, atoms that you can include into your components templates, powered by Angular, Ember, React or whatever”. Likewise, Kevin Schaaf from the Polymer team explained that “Polymer’s primary mission is to help you build custom elements – full stop”. However, he continues to explain that by leveraging the DOM as your framework, you are able to build full applications with nothing but Web Components.
 
 This means that you can use Web Components as much or as little as you want in your application. You can decide to only improve one static table on your site by wrapping it in a <vaadin-grid> or introduce a “time ago” tag like GitHub. But there’s also nothing preventing you from building a full blown application with nothing but Web Components like we did in our Expense Manager Web Components demo application – the choice is yours.
+
+现在我们看到世界上的各大公司使用Web Component用作生产环境开发，并且Web Component Polyfill支持所有现代浏览器，问题是如何开始？ 
+
+很对人还在苦于理解如何使用Web Component。单个的Web Component可以被已经存在的Web 框架拓展使用，或者你整个网站都应该使用Web Component来实现吗？ 
+
+Bosonic的创始人解释：“Web Component让UI个体的表现如HTML元素一样。这些原子体允许你在Angular，Emer，React或者其他任何框架中使用”。同样，来自Polymer的Kevin Schaaf解释说：“Polymer最根本的目标就是帮助你建立基础的组件-仅此而已”。然而，它也表示因为其对DOM的影响，你完完全全只需要使用Web Component来开发项目。
+
+这也就意味着你可以在项目中任意的使用Web Component。你可以只使用`<vaadin-grid>来改善静态的表格。当然这都无法阻止你使用Web Component来建立一个完整的网站--选择权在于你。
+
+
