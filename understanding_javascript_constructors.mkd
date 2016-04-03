@@ -218,8 +218,13 @@ Since a constructor is just a function, it can be called without the new keyword
 
 Most of built-in constructors, such as Object, Regex and Array, are scope-safe. They use a pattern to determine whether the constructor is called with new or not.
 
-If new isn't used, a proper instance of the object is created by calling the constructor again with new keyword. Consider the following code:
+If new isn't used, a proper instance of the object is created by calling the constructor again with new keyword. 
 
+因为构造函数也只是一个函数，它可以在不使用`new`关键字的情况下被调用，它可能会导致不可预知的结果或者错误。解决方法就是作用域安全(scope-safe)。我们可以选择是否使用`new`关键字来创建构造函数，它都能得到相同的结果
+
+Consider the following code:
+
+```
 function Book(name) { 
   if (!(this instanceof Book)) { 
     
@@ -227,8 +232,11 @@ function Book(name) {
     return new Book(name);
   } 
 }
+```
+
 So using this pattern we can easily rewrite a scope-safe version of our constructor:
 
+```
 function Book(name, year) { 
   if (!(this instanceof Book)) { 
     return new Book(name, year);
@@ -241,8 +249,14 @@ var person1 = new Book("js book", 2014);
 var person2 = Book("js book", 2014);
 console.log(person1 instanceof Book);    // true
 console.log(person2 instanceof Book);    // true
+```
+
 The fact that "this" is an instance of the custom type allows us to determine if new is not used as soon as the constructor begins to execute and run the constructor again with new keyword.
 
-#Conclusion
+"this"是自定义对象实例的一个引用，它让我们能够在调用构造函数时就能马上知道是否使用了`new`关键字， 如果没有使用则使用`new`关键字重新调用一遍构造函数。
+
+### Conclusion
 
 JavaScript has no class statement, which is baffling for coders who are used to languages with a class statement; However, JavaScript has constructors to bring similar functionality. Constructors are just regular functions which are used with new keyword. They come in handy when we need to make multiple similar objects with the same properties and methods.
+
+JavaScript没有"class"这种语法，这让那些习惯使用有"class"语言的程序员感到困惑；然而构造函数带来了和"class"类似的功能特性。构造函数就是当我们需要使用多个具有相同属性，相同方法的对象实例时，使用`new`关键字来调用的函数。
