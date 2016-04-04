@@ -1,0 +1,63 @@
+## [Why I don’t use CSS preprocessors](Why I don’t use CSS preprocessors
+
+Whenever I mention that I don’t use CSS preprocessors I tend to get strange looks from people who cannot imagine writing CSS without Sass. And so I have to defend my choice and explain why, over and over. Some people will understand, most won’t. Or they don’t want to. But here’s an attempt to explain my reasoning.
+
+Back when CSS preprocessors first came into fashion I did try using them. And then every couple of years, due to external pressure and nagging, I have taken new looks and given them new chances. But to me they’ve always felt like solutions in need of a problem to solve. That is, I don’t really find the “problems” with CSS that preprocessors are intended to solve, problems. The scale of the site I’m building does not matter, be it a tiny site with just a few static pages or a humongous corporate intranet. I simply have never felt the need for mixins, nesting or extends.
+
+每次当我提及我不使用CSS的预处理功能时，我通常会在那些写CSS时离不开Sass的工程师的脸上看到奇怪的表情。通常我都会尽全力的去维护我的言论并且解释原因。有些人会明白，理解，大多数人不理解或者不愿意去接收。这里我来解释我的原因。
+
+在CSS预处理器开始流行的时候，我确实也尝试用它们。几年以后，受到外部的压力和舆论，我再次重新审视了一下。但是它任然是一个需要解决的问题。我并不知道这些CSS预处理器在试图解决什么问题。对于我建立的这个网站，或者只需要几个页面的网站，或者是一个需要多人合作的内部系统， 我认为完全不需要使用`mixins`，层叠，拓展。
+
+A list of reasons then:
+
+* I don’t feel the “problems” CSS preprocessors intend to solve are serious enough to warrant the cost, i.e. to me the solution is worse than the problem.
+ 
+* I want absolute control of my CSS, which means I want to work hands on with it, and see exactly what will be sent to the browser (well, before it’s minified and gzipped, of course). If that means seeing the same declarations repeated in several rules, or having to see what vendor prefixes look like, so be it. To me, WET CSS is much more understandable and maintainable than DRY black box pseudo-CSS.
+
+* I don’t want to learn and depend on a non-standard syntax to wrap my CSS in, making it require compilation before browsers can understand it. Neither do I want my colleagues to have to.
+
+* I want my source CSS to be deployable at all times, albeit in un-minified, un-concatenated form. If my build process fails, for whatever reason (like an unpublished npm module), I can deploy the source CSS as an emergency solution. Performance may perhaps take a hit, but a slightly slower site is likely better than a site with broken or no CSS until the build process can be fixed.
+
+* I don’t want to have to wait for compilation before seeing the results of my CSS changes. Processing time may be anything from negligible to frustrating, obviously, but if it takes longer than the time it takes for me to switch from my code editor to my browser and reload the page (≈1s) it’s too slow.
+
+列出以下原因： 
+
+* 我不认为CSS试图解决的“问题”有那么严重。在我看来，解决方法比问题更加严重。
+
+* 我想对我的CSS有完全的控制，这意味着我必须手写CSS代码，知道什么代码被发送到了浏览器(当然是在代码被minfiy和gzip压缩以前).当然这意味着我们会在多个规则中看到重复的定义规则，或者看到多个运营商的前缀。对我来说，未经处理的代码比经过预处理器处理后的代码更加容易理解和维护。 
+
+* 我希望我的CSS随时都可以发布，即使是没有经过压缩或者没有连接的形式。即使我的编译流程失败了（比如在发布一个npm包），我也可以直接部署我的源码作为应急预案。性能可能会受到影响，但是一个慢的网站也要比一个CSS有问题，或者没有的网站要强的多。
+
+* 我不需要等到编译结束之后才能看到我的CSS的变化。编译时间可能是忽略不计的。但是如果它比我从编辑器切换到浏览器，然后在刷新页面的时间还要长的话，那就太慢了。 
+
+
+I’m fully aware that many people who use CSS preprocessors will disagree with most or all of the above. I already know that so no need to tell me :-).
+
+However, me not using Sass or other CSS preprocessors like cssnext does not mean I don’t use CSS processors. The difference, as I see it, is whether or not your CSS requires compilation before browsers can understand it, which I really want to avoid.
+
+I use PostCSS (with third party plugins and ones I’ve written myself) and CSScomb as helpers for things like:
+
+* sorting declarations and fixing coding style issues with CSScomb
+* automatically inserting vendor prefixes wherever they are necessary (or removing them wherever they’re not)
+* inserting fallbacks for custom properties
+* linting CSS
+
+I set up both CSScomb and PostCSS to work on my source CSS, which means I always see the results. No black boxes. I can save my file and reload instantly without having to wait for compilation (since the changes are mostly cosmetic and vendor prefixes/fallbacks only need to be inserted once). But the tools save me some typing and fix most coding style inconsistencies for me. That’s my kind of CSS processing.
+
+Posted on March 27, 2016 in CSS)
+
+我知道很多使用CSS预处理器的人不会同意上面我所说的。
+
+然而，虽然说我不使用Sass或者csstext这样的预处理器并不意味我不使用CSS处理器。区别在于在编译之前浏览器是否认识它们。
+
+使用PostCSS和CSScombo来帮助我处理以下事情：
+
+* 对声明进行排序并使用CSScombo修复代码样式；
+* 在需要的时候自动插入不同浏览器前缀；
+* 对自定义的属性向后兼容；
+* CSS语法检查
+
+在编写CSS代码时始终开启CSScombo和PostCSS，这样我就能一直看到结果。没有黑盒。当我保存代码时，就能够马上看到代码修改。这就是我说的CSS处理。
+
+
+
