@@ -1,75 +1,125 @@
-[ES6 module loading: More complicated than you think](https://www.nczonline.net/blog/2016/04/es6-module-loading-more-complicated-than-you-think/)
+## [ES6 module loading: More complicated than you think](https://www.nczonline.net/blog/2016/04/es6-module-loading-more-complicated-than-you-think/)
 Posted at April 5, 2016 by Nicholas C. Zakas
 
 One of the most long-awaited features of ECMAScript 6 is the formal definition of modules as part of the language. For years, JavaScript developers have struggled with organizing their code and needing to decide between alternate ad-hoc module formats like RequireJS, AMD, and CommonJS. Formally defining modules as part of JavaScript will eliminate a lot of heartache in the future, but right now, there is still a lot of confusion about how modules work. The confusion exists partly because, as of my writing, there are no engines that can natively load ES6 modules. In the meantime, I'm hoping this post will clarify some of the confusion.
 
-What is a module?
+ECMAScript6 模块作为语言的一部分迟迟得不到确定。这些年来，JavaScript开发者在使用ad-hoc模块定义如RequireJS，AMD和CommonJS方式组织代码模块中苦苦挣扎。作为语言一部分的模块定义规则会解决很多问题，但是到目前为止，还是没有确定该使用哪种模块定义规则，并且还没有任何引擎本地支持ES6的模块加载。与此同时，我希望这篇文章能说清楚这其中的困惑。
+
+### What is a module?
 
 To start, it's important to understand that the specification defines two different types of JavaScript programs: scripts (what we've all been using since JavaScript was created) and modules (newly defined in ES6). While scripts behave the way everyone is used to, modules behave somewhat differently. Specifically modules:
 
-Are always in strict mode with no option to opt-out
-Have a top-level scope that is not the global scope
-May import bindings from other modules using import
-May specify bindings that should be exported using export
+1. Are always in strict mode with no option to opt-out
+2. Have a top-level scope that is not the global scope
+3. May import bindings from other modules using import
+4. May specify bindings that should be exported using export
+
 These differences look subtle but in fact make modules different enough that parsing and loading needs to be done differently than with scripts.
 
-Parsing differences
+首先，弄清楚标准定义了两种不同类型的JavaScript程序：脚本（我们一直在使用的）和模块（ES6中的新特性）。脚本的行为我们都很清楚，模块的行为有一些不同的地方。特别的模块单元：
+
+1. 始终要求使用严格模式解析（strict mode）
+2. 不同于global的顶级作用域
+3. 可以使用`import`引入其他模块绑定
+4. 必须使用`export`导出该模块
+
+这些区别看起来很小但事实上会在语法分析和加载上和脚本有很大的不同。 
+
+
+
+### Parsing differences
 
 One of the most frequent questions received on ESLint related to ES6 modules is this:
 
-Why do I need to specify that a file is a module before it's parsed? Can't you just look for import or export?
+> Why do I need to specify that a file is a module before it's parsed? Can't you just look for import or export?
 
 I've seen this question repeated all over the Internet as people struggle to understand why JavaScript engines and tools can't autodetect that a file represents a module rather than a script. At first glance, it seems like detecting the presence of export or import should be enough to determine that a file contains a module, but in reality, that's nowhere near enough.
 
 Trying to guess user intent is a dangerous and imprecise game. If you guess correctly, the world applauds you whereas guessing incorrectly has the potential to cause a great deal of damage.
 
-Parsing challenges
+在ESLint上经常被问及的关于ES6 模块的问题是： 
+
+> 为什么我需要指定某个文件是一个模块？难道你不能够通过`import`或者`export`来判断吗?
+
+我在网上经常能够看到很多人疑惑为什么JavaScript引擎和工具不能够自动识别出某个文件是一个模块而不是一个普通的脚本文件。乍一看，通过使用`import`和`export`判断一个文件是否包含一个模块就足够了，但是现实中，这一点也不够。
+
+试图猜测用户的意图是一个危险并且不准确的游戏。如果你猜测正确了，全世界都会为你欢呼，但是如果错误，就有可能带来大量潜在的风险。
+
+#### Parsing challenges
 
 In order to autodetect modules in JavaScript programs, you would first have to parse the entire file. Modules need not use import, and so the only positive signal that a file is a module might be the very last statement using an export. So, you cannot escape parsing the entire file in order to have a chance to determine whether or not it's a module.
 
 However, modules are strict mode environments. Strict mode doesn't just have runtime requirements, it also defines the following as syntax errors:
 
-The with statement
-Duplicate named arguments for functions
-Octal numeric literals (such as 010)
-Duplicate property names (in ES5 only, ES6 eliminates this error)
-Use of implements, interface, let, package, private, protected, public, static, and yield as identifiers.
+* The with statement
+* Duplicate named arguments for functions
+* Octal numeric literals (such as 010)
+* Duplicate property names (in ES5 only, ES6 eliminates this error)
+* Use of implements, interface, let, package, private, protected, public, static, and yield as identifiers.
+
+如果想自动检测JavaScript模块，首先需要对整个文件进行语法分析。模块可能不需要使用`import`，所以唯一的信号就是在文件中需要最后定义的`export`。所以你无法跳过对整个文件的语法分析的过程。
+
+然而，模块需要严格模式的环境。严格模式不仅要求运行时环境，同时它也定义以下语法错误： 
+* 使用`with`语法
+* 在函数上使用重复的命名参数
+* 8进制的使用
+* 重复的属性名称
+* 使用`implements`,`interface`,`let`,`package`,`private`,`protected`,`public`,`static`,`yield`作为标识符。
+
 All of these are not syntax errors when running in nonstrict mode. If the only signal you have is an export in the last statement of the file, then you would actually have to re-parse the entire file in strict mode to be sure to catch all of these syntax errors. The first parse would have been wasted by running nonstrict mode.
 
 Of course, if you had to detect a module from file contents, you would be forced to always parse files as modules. Since module syntax is strict mode plus import and export, you'd need to default to that in order to allow for import and export to be used. If you were to parse in nonstrict mode, then import and export are a syntax error. You could alternately created a parsing mode that combined nonstrict mode with import and export, but that's an unnatural mode whose result couldn't be used, thus requiring a second pass once the correct mode was determined.
 
-When is a module a module?
+在非严格模式下，这些都不是语法错误。如果你在文件中找到了`export`的使用，你就必须在严格模式下对整个文件进行重新的编译检测语法错误，那么第一次的非严格模式的检测就被浪费了。
+
+如果你检测一个文件是否是模块，你就必须使用模块的规则进行语法分析。因为模块的语法规则是严格模式加`import`和`export`标识符，那么必须默认规定`import`和`export`是被允许使用的。如果你使用非严格模式，`import`和`export`就是一个语法错误。你可以选择性的创建一个新的语法分析模式，它允许在非严格模式下使用`import`和`export`,然而这种结果是不可信
+
+#### When is a module a module?
 
 The edge case that many miss in the discussion is that modules are not required to use import or export at all. You can have a module that doesn't import anything and doesn't export anything. It might, for example, just modify something in the global scope. For instance, maybe you want to output a message when window.onload fires in a browser and you define a module such as:
 
+还有个在讨论中被忽视的边缘情况是有些情况下模块并不需要使用`import`和`export`。你的模块可以不导入或导出任何内容。比如，这个模块只对全局的内容做一些修改，比如在`window.onload`事件触发的时候打印一些内容。
+
+```
 // this is a valid module!
 
 window.addEventListener("load", function() {
     console.log("Window is loaded");
 });
+```
 This module can then be loaded by another module or on its own. From looking at the source, there is no way to know that it's a module.
 
 To sum up: while the presence of import or export might indicate a module, the lack of import or export does not clearly indicate that the file is not a module. So there is no effective way to autodetect that a file is a module during parsing.
 
-Loading Differences
+### Loading Differences
 
 While the parsing differences are a bit subtle for modules, the loading differences are not. When a module is loaded, import statements trigger the loading of the specified files. The imported files must be completed parsed and loaded (without error) in order for module execution to begin. In order to do this as quickly as possible, loading begins as import statement are being parsed, prior to parsing the rest of the file.
 
 Once a dependency has been loaded, there's an extra step of verifying that the imported bindings actually exist in the dependency. If you import foo from the module foo.js, the JavaScript engine needs to verify that foo is exported from foo.js before execution continues.
 
-How loading will work
+模块的语法上的区别相对较小，但加载则大有不同。当模块加载时，import声明则触发去加载指定的文件。引入的模块必须保证无语法错误。模块加载开始于import 申明，然后才去处理其他部分的内容。一旦依赖加载之后，另外一个需要的步骤就是去验证被导入的文件在确实存在依赖中。比如你从foo.js中导入foo模块，JavaScript必须确定foo.js确实导出了该foo模块。
+
+#### How loading will work
 
 At this point, hopefully it's clear why you need to specify that a file is a module before it is parsed and loaded. In browsers, you will load modules like this:
-
+```
 <script type="module" src="foo.js"></script>
+```
+
 The <script> tag is the same as always, but the type is set to "module"[1]. This signals to the browser that the file should be loaded as a module. If that foo.js then imports other dependencies, those will be loaded dynamically.
 
 In Node.js, there is not yet a decision on how ES6 modules will be loaded. The most recent recommendation is to use a special file extension, such as .jsm, to indicate that a file is an ES6 module so that Node.js knows how to load it correctly[2].
 
-Conclusion
+现在，希望你能够清晰的知道为什么需要指明某个文件是一个模块。在浏览器中你会通过```
+<script type="module" src="foo.js"></script>
+```这种方式加载模块。当foo.js加载之后，它会动态的加载其依赖的其他模块。
+
+Nodejs目前还没有确定应该如何加载ES6模块。目前还有人建议使用一个特殊的文件后缀如'jsm'来指明该文件是一个ES6的模块。
+### Conclusion
 
 The differences between scripts and modules are subtle enough that it's hard for developers to understand the restriction of declaring what a JavaScript file represents ahead of time. My hope is that this post clarifies some of the reasons why it's not possible to autodetect modules from inspecting the source code and why tools such as ESLint ask you to specify the file type before executing. There will be a point in the future where ES6 modules are the dominant JavaScript file type and script files are left only on legacy applications, and at that point, it's likely that tools will default to assuming that files are modules. In the meantime, we're going through a difficult adolescence between scripts and modules where mixing the two is going to be a bit painful.
 
+JavaScript脚本和模块之间的区别还是很小的，对于开发者而言很难去区分它们。我希望这篇文字能够让你清楚的知道为什么不能够使用自动检测代码的方式来确定模块，为什么ESLint工具要求你指明某个文件是模块。将来ES6的模块将会是主要的文件类型，普通的脚本将会成为一些项目的历史遗留。
 Updates
 
 Fix (06-Apr-2016): The original version of this post incorrectly stated that import statements must appear at the top of the file. This was removed.
