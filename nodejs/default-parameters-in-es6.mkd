@@ -1,0 +1,85 @@
+## [Default parameters(ES2015) Sample](https://googlechrome.github.io/samples/default-parameters-es6/index.html)
+
+### 背景介绍
+
+&emsp;&emsp;在ES5中，我们需要在函数体内部判断参数值是否存在，如果参数值为undefined时，需要给它指定默认值。在ES2015，也就是ES6中，完全不需要做这个多余的操作，我们只需要在函数头部给参数指定默认值即可。
+
+### 说明
+目前该特性可以在Chrome49+上看到
+
+### ES5和ES2015/ES6比较
+
+```
+// 给参数指定默认值
+
+// ES5中的写法
+function greetES5(message, to) {
+  //检测参数是否赋值，若无则提供一个默认值
+  to = to || 'DOM';
+  // 或者 if (typeof to === undefined) { to = 'DOM'; }
+  // 或者 if (arguments.length === 1) { to = 'DOM'; }
+  console.log(message + ', ' + to);
+}
+greetES5('Good morning');
+greetES5('Sup', 'CSS');
+
+// 使用 ES2015/ES6...
+// 在函数头部给函数给参数指定默认值
+function greet(message, to = 'DOM') {
+  console.log(message + ', ' + to);
+}
+
+greet('Good morning');
+greet('Sup', 'CSS');
+
+//output
+//"Good morning, DOM"
+//"Sup, CSS"
+```
+### 何时生效?
+
+```
+function f(x, y = 12) {
+  // 这里还是用了ES6的模板String特性
+  console.log(`${x} + ${y} = ${x + y}`);
+}
+
+f(3);
+
+// 这里要注意： 因为我们指定了'y'的值，所以不再使用默认值
+f(7, 0);
+//还有一点需要注意， 如果传入undefined 作为第二个参数时，依然使用参数的默认赋值。
+f(7, undefined);
+
+//output
+//"3 + 12 = 15"
+//"7 + 0 = 7"
+//"7 + 12 = 19"
+```
+
+相关文章 [MDN Function passing undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters#Passing_undefined
+)
+
+### 运行时
+
+&emsp;&emsp;默认参数的使用是在每次函数调用才被确定。这意味着每次都会创建一个新的数组。
+
+```
+function append(value, array = []) {
+  array.push(value);
+  console.log(array);
+}
+
+append(1);
+append(2); // [2] instead of [1, 2]
+
+//output
+//这里要注意:第一次调用和第二次调用的生成的arr是不同的。
+//[1]
+//[2]
+```
+相关文章 [MDN Function runtime call](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters#Evaluated_at_call_time) 
+
+
+
+
