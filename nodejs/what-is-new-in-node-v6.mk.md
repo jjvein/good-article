@@ -12,8 +12,9 @@ Node.js v6 just got released - let's take a look at the improvements and new fea
 
 - **Module loading got 4-times faster **compared to the current LTS version (Node.js v4). This helps developers to shorten the bootstrap phase of the applications.
 Related PRs:
-		- https://github.com/nodejs/node/pull/5689
-		- https://github.com/nodejs/node/pull/5950
+
+		https://github.com/nodejs/node/pull/5689
+		https://github.com/nodejs/node/pull/5950
 
 
 - Updated V8 engine
