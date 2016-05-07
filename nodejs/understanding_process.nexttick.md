@@ -62,6 +62,7 @@ So, alas, we don't really get any magical multi-core parallelism benefits by usi
 ### Keeping callbacks truly asynchronous
 When you are writing a function that takes a callback, you should always ensure that this callback is fired asynchronously. Let's look at an example which violates this convention:
 
+```
 function asyncFake(data, callback) {        
     if(data === 'foo') callback(true);
     else callback(false);
@@ -70,24 +71,31 @@ function asyncFake(data, callback) {
 asyncFake('bar', function(result) {
     // this callback is actually called synchronously!
 });
+```
 Why is this inconsistency bad? Let's consider this example taken from Node's documentation:
 
+```
 var client = net.connect(8124, function() { 
     console.log('client connected');
     client.write('world!\r\n');
 });
+```
 In the above case, if for some reason, net.connect() were to become synchronous, the callback would be called immediately, and hence the client variable will not be initialized when the it's accessed by the callback to write to the client!
 
-We can correct asyncFake() to be always asynchronous this way:
+We can correct `asyncFake()` to be always asynchronous this way:
 
+```
 function asyncReal(data, callback) {
     process.nextTick(function() {
         callback(data === 'foo');       
     });
 }
-When emitting events
+```
+
+### When emitting events
 Let's say you are writing a library that reads from a source and emits events that contains the chunks that are read. Such a library might look like this:
 
+```
 var EventEmitter = require('events').EventEmitter;
 
 function StreamLibrary(resourceName) { 
@@ -97,8 +105,10 @@ function StreamLibrary(resourceName) {
     this.emit('data', chunkRead);       
 }
 StreamLibrary.prototype.__proto__ = EventEmitter.prototype;   // inherit from EventEmitter
+```
 Let's say that somewhere else, someone is listening to these events:
 
+```
 var stream = new StreamLibrary('fooResource');
 
 stream.on('start', function() {
@@ -108,8 +118,10 @@ stream.on('start', function() {
 stream.on('data', function(chunk) {
     console.log('Received: ' + chunk);
 });
-In the above example, the listener will never get the start event as that event would be emitted by StreamLibrary immediately during the constructor call. At that time, we have not yet assigned a callback to the start event yet. Therefore, we would never catch this event! Once again, we can use process.nextTick() to defer the emit till the listener has had the chance to listen for the event.
+```
+In the above example, the listener will never get the start event as that event would be emitted by StreamLibrary immediately during the constructor call. At that time, we have not yet assigned a callback to the start event yet. Therefore, we would never catch this event! Once again, we can use `process.nextTick()` to defer the emit till the listener has had the chance to listen for the event.
 
+```
 function StreamLibrary(resourceName) {      
     var self = this;
 
@@ -120,4 +132,5 @@ function StreamLibrary(resourceName) {
     // read from the file, and for every chunk read, do:        
     this.emit('data', chunkRead);       
 }
-I hope that demystifies process.nextTick(). If I have missed out something, please do share in the comments.
+```
+I hope that demystifies `process.nextTick()`. If I have missed out something, please do share in the comments.
