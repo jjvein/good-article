@@ -82,7 +82,7 @@ But, you could get away from all that complexity by including preload directives
 <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>  
 One point worth going over: You have to add a crossorigin attribute when fetching fonts, as they are fetched using anonymous mode CORS. Yes, even if your fonts are on the same origin as the page. Sorry.
 Also, the type attribute is there to make sure that this resource will only get preloaded on browsers that support that file type. Right now, only Chrome supports preload, and it does support WOFF2 as well, but more browsers may support preload in the future, and we cannot assume they’d also support WOFF2. The same is true for any resource type you’re preloading and which browser support isn’t ubiquitous.  
-提前加载字体  
+### 提前加载字体  
 提前加载“后来被发现的资源”的一个体现是网页字体。一方面它们对于页面字体的渲染是非常重要的，另外，它们深藏在CSS的内部，即使浏览器的preloader解析了CSS，它们也只能在选择器真的对某个DOM节点应用该字体时才能确定它们是有用的。理论上，浏览器是可以分析出来，但是它们并不这样做。如果它们下一行CSS规则分析出的字体规则覆盖了现有规则，就可能会引起虚假的下载请求。简单的说，很复杂。  
 但是，你可以不用考虑所有复杂性来使用preload指令预先加载需要的字体文件。
 ```
@@ -128,7 +128,7 @@ Another cool hack is to use the onload handler in order to create some sort of a
 and get async loaded styles in markup! Scott also has a nice demo page for that feature.  
 The same can also work for async scripts.
 We already have <script async> you say? Well, <script async> is great, but it blocks the window’s onload event. In some cases, that’s exactly what you want it to do, but in other cases less so.  
-基于标记的一步加载  
+### 基于标记的一步加载  
 另一个非常有趣的hack方法是使用*onload*事件来创建一些基于标签的异步加载。Scott Jehl 是第一个使用该方法加载他的css库的。简单的说，
 ```
 <link rel="preload" as="style" href="async_style.css" onload="this.rel='stylesheet'">
